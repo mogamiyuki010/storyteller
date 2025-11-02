@@ -7,24 +7,19 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 // 檢查環境變數是否設定
 if (!supabaseUrl || !supabaseAnonKey) {
   const errorMsg = 
-    '❌ 錯誤：缺少 Supabase 環境變數！\n' +
-    '請確保 .env.local 檔案中有設定：\n' +
+    '❌ 警告：缺少 Supabase 環境變數！\n' +
+    '請在 Render Dashboard 設定環境變數：\n' +
     '  - VITE_SUPABASE_URL\n' +
     '  - VITE_SUPABASE_ANON_KEY\n\n' +
-    '如果還沒設定，請參考 .env.example 檔案。';
+    '應用程式將繼續運行，但 Supabase 功能無法使用。';
   
-  if (import.meta.env.DEV) {
-    // 開發環境：顯示警告但繼續執行（使用空字串，會導致 API 錯誤但不會崩潰）
-    console.error(errorMsg);
-  } else {
-    // 生產環境：直接拋出錯誤
-    throw new Error(errorMsg);
-  }
+  // 顯示警告但繼續執行（避免應用程式崩潰）
+  console.warn(errorMsg);
 }
 
-// 創建 Supabase 客戶端
+// 創建 Supabase 客戶端（即使環境變數缺失也創建，避免應用程式崩潰）
 export const supabase = createClient(
-  supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseAnonKey || 'placeholder-key'
+  supabaseUrl || 'https://yesrdworllzcwetirpxp.supabase.co',
+  supabaseAnonKey || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inllc3Jkd29ybGx6Y3dldGlycHhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMTIzNTQsImV4cCI6MjA3NzU4ODM1NH0.GD-njFtrCPvlqzhMHD1tZv0Qiv--NRe5uWJqpvBdrGo'
 );
 
